@@ -1,0 +1,1550 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalAI - 跨境电商AI平台曝光优化专家</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#D4AF37', // 金色作为主色调，体现轻奢感
+                        secondary: '#B0C4DE', // 银色作为辅助色
+                        accent: '#8B4513', // 深棕色作为强调色
+                        light: '#F5F5F5', // 浅灰色作为文本
+                        dark: '#121212', // 黑色作为背景
+                        'dark-light': '#1E1E1E', // 稍亮的黑色用于卡片背景
+                        'gray-light': '#333333', // 深灰色用于边框和分割线
+                        'gray-medium': '#666666', // 中灰色用于次要文本
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #D4AF37 0%, #B0C4DE 100%);
+            }
+            .bg-gradient-gold {
+                background: linear-gradient(135deg, #D4AF37 0%, #F2D272 50%, #D4AF37 100%);
+            }
+            .text-gradient-gold {
+                background-clip: text;
+                -webkit-background-clip: text;
+                background-image: linear-gradient(135deg, #D4AF37 0%, #F2D272 100%);
+                color: transparent;
+                -webkit-text-fill-color: transparent;
+            }
+            .bg-gradient-light {
+                background: linear-gradient(135deg, #F5F7FA 0%, #E4E7EB 100%);
+            }
+            .transition-all-300 {
+                transition: all 300ms ease-in-out;
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #121212;
+            color: #F5F5F5;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1E1E1E 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 0;
+        }
+        
+        .section {
+            padding: 6rem 0;
+            background-color: #121212;
+        }
+        
+        .service-card {
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background-color: #1E1E1E;
+            border: 1px solid #333333;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+        
+        .service-icon {
+            transition: all 0.3s ease;
+            color: #D4AF37;
+        }
+        
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+            color: #F2D272;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+        }
+        
+        /* AI Platform Selector */
+        .platform-selector {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .platform-selector::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .platform-item {
+            scroll-snap-align: start;
+            flex: 0 0 auto;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .platform-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .platform-item {
+            background-color: #1E1E1E;
+            border: 1px solid #333333;
+        }
+        
+        .platform-item.active {
+            border-color: #D4AF37;
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Data visualization */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Animated numbers */
+        .counter-value {
+            transition: all 0.5s ease;
+        }
+        
+        /* Navbar styles */
+        .navbar {
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .service-card {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar fixed top-0 left-0 w-full z-50 py-4 px-6 flex justify-between items-center transition-all duration-300 bg-transparent">
+        <div class="flex items-center">
+            <a href="#" class="text-2xl font-bold text-white">Global<span class="text-secondary">AI</span></a>
+        </div>
+        
+        <div class="hidden md:flex space-x-8">
+            <a href="#home" class="text-white hover:text-secondary transition-all-300">首页</a>
+            <a href="#services" class="text-white hover:text-secondary transition-all-300">服务</a>
+            <a href="#ai-platforms" class="text-white hover:text-secondary transition-all-300">AI平台分析</a>
+            <a href="#cases" class="text-white hover:text-secondary transition-all-300">成功案例</a>
+            <a href="#process" class="text-white hover:text-secondary transition-all-300">服务流程</a>
+            <a href="#about" class="text-white hover:text-secondary transition-all-300">关于我们</a>
+        </div>
+        
+        <div class="md:hidden">
+            <button id="menu-toggle" class="text-white focus:outline-none">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed fixed top-0 left-0 w-full h-full bg-dark z-40 transform translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="flex justify-end p-6">
+            <button id="close-menu" class="text-dark focus:outline-none">
+                <i class="fa fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full space-y-8 text-xl">
+            <a href="#home" class="text-dark hover:text-primary transition-all-300 mobile-link">首页</a>
+            <a href="#services" class="text-dark hover:text-primary transition-all-300 mobile-link">服务</a>
+            <a href="#ai-platforms" class="text-dark hover:text-primary transition-all-300 mobile-link">AI平台分析</a>
+            <a href="#cases" class="text-dark hover:text-primary transition-all-300 mobile-link">成功案例</a>
+            <a href="#process" class="text-dark hover:text-primary transition-all-300 mobile-link">服务流程</a>
+            <a href="#about" class="text-dark hover:text-primary transition-all-300 mobile-link">关于我们</a>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero-section flex items-center justify-center relative">
+        <div class="container mx-auto px-6 z-10">
+            <div class="hero-content text-center">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+                    AI时代下的<br>
+                    <span class="text-secondary">跨境品牌曝光</span>专家
+                </h1>
+                <p class="text-xl text-white opacity-90 mb-8 max-w-2xl mx-auto">
+                    帮助中国企业在全球AI平台上通过关键词优化提升品牌和产品曝光率，<br>
+                    成为AI时代下中国企业出海品牌排名曝光的最佳助手
+                </p>
+                <div class="flex flex-col md:flex-row justify-center gap-4">
+                    <a href="#services" class="bg-gradient-gold text-dark hover:bg-opacity-90 font-medium py-3 px-8 rounded-full transition-all-300 shadow-lg shadow-primary shadow-opacity-20">
+                        了解服务
+                    </a>
+                    <a href="#contact" class="bg-transparent border border-primary text-primary hover:bg-primary hover:text-dark font-medium py-3 px-8 rounded-full transition-all-300">
+                        免费咨询
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#services" class="text-white">
+                <i class="fa fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section id="services" class="section bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4">我们的服务</h2>
+                <p class="text-xl text-gray-medium max-w-2xl mx-auto">
+                    提供全方位的AI平台曝光优化服务，帮助跨境电商和外贸企业在AI时代脱颖而出
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-white shadow-card p-8 text-center reveal" data-delay="200">
+                    <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-primary bg-opacity-10 flex items-center justify-center">
+                        <i class="fa fa-line-chart text-4xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">GEO服务</h3>
+                    <p class="text-gray-medium mb-6">
+                        生成式引擎优化服务，帮助企业内容在AI平台上获得更高可见度，提升品牌在AI推荐中的排名和引用率。
+                    </p>
+                    <ul class="text-left space-y-3 mb-6">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>AI内容优化与结构化</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>多平台AI推荐算法适配</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>AI平台可见度监测与优化</span>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="inline-block bg-gradient-gold hover:bg-opacity-90 text-dark font-medium py-2 px-6 rounded-full transition-all-300 shadow-lg shadow-primary shadow-opacity-20">
+                        了解更多
+                    </a>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white shadow-card p-8 text-center reveal" data-delay="400">
+                    <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-primary bg-opacity-10 flex items-center justify-center">
+                        <i class="fa fa-search text-4xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">关键词搜索优化</h3>
+                    <p class="text-gray-medium mb-6">
+                        基于AI搜索趋势，制定有效的关键词策略，提升企业在AI平台上的搜索排名和曝光率。
+                    </p>
+                    <ul class="text-left space-y-3 mb-6">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>AI关键词挖掘与分析</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>语义关联与用户意图匹配</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>关键词排名追踪与优化</span>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="inline-block bg-gradient-gold hover:bg-opacity-90 text-dark font-medium py-2 px-6 rounded-full transition-all-300 shadow-lg shadow-primary shadow-opacity-20">
+                        了解更多
+                    </a>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white shadow-card p-8 text-center reveal" data-delay="600">
+                    <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-primary bg-opacity-10 flex items-center justify-center">
+                        <i class="fa fa-globe text-4xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">品牌曝光排名</h3>
+                    <p class="text-gray-medium mb-6">
+                        全面提升企业品牌在AI平台生态中的整体曝光度和影响力，增强品牌认知度和信任度。
+                    </p>
+                    <ul class="text-left space-y-3 mb-6">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>品牌提及监测与分析</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>多渠道品牌曝光策略</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                            <span>竞争对手对比分析</span>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="inline-block bg-gradient-gold hover:bg-opacity-90 text-dark font-medium py-2 px-6 rounded-full transition-all-300 shadow-lg shadow-primary shadow-opacity-20">
+                        了解更多
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AI Platform Platform Platform Analysis Section -->
+    <section id="ai-platforms" class="section bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4">AI平台分析</h2>
+                <p class="text-xl text-gray-medium max-w-2xl mx-auto">
+                    深入分析主流AI平台的搜索趋势和用户行为，为企业提供精准的曝光优化策略
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <h3 class="text-2xl font-bold mb-6">AI平台搜索趋势</h3>
+                    <p class="text-gray-medium mb-8">
+                        随着AI技术的快速发展，用户获取信息的方式正在从传统搜索引擎转向AI对话式搜索。我们的数据分析显示，2025年AI引导至零售网站的流量同比激增4700%，而传统搜索引擎流量持续下滑。
+                    </p>
+                    
+                    <div class="bg-dark-light rounded-xl shadow-card p-6 mb-8 border border-gray-light">
+                        <h4 class="text-xl font-bold mb-4">AI平台用户行为洞察</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fa fa-comments text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold">对话式搜索增长</h5>
+                                    <p class="text-gray-medium">AI原生搜索的查询变得更长（平均包含23个词），且搜索会话也更深入（平均持续6分钟）</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fa fa-bar-chart text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold">零点击点击搜索兴起</h5>
+                                    <p class="text-gray-medium">53%的用户认为AI比社交媒体更更可靠，近6成用户使用AI后减少了社媒购信息搜寻时间</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full-full bg-primary bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fa fa-globe text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold">多平台使用趋势</h5>
+                                    <p class="text-gray-medium">不同AI平台有不同的信源偏好，需针对性优化内容策略</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-dark-light rounded-xl shadow-card p-6 border border-gray-light">
+                        <h4 class="text-xl font-bold mb-4 text-gradient-gold">AI平台选择器</h4>
+                        <p class="text-gray-medium mb-4">
+                            选择目标AI平台，了解其特点和优化策略
+                        </p>
+                        
+                        <div class="platform-selector mb-6">
+                            <div class="platform-item active p-4 border rounded-lg mr-4 w-48 text-center cursor-pointer">
+                                <i class="fa fa-robot text-2xl text-primary mb-2"></i>
+                                <p class="font-medium">ChatGPT</p>
+                            </div>
+                            <div class="platform-item p-4 border rounded-lg mr-4 w-48 text-center cursor-pointer">
+                                <i class="fa fa-google text-2xl text-primary mb-2"></i>
+                                <p class="font-medium">Gemini</p>
+                            </div>
+                            <div class="platform-item p-4 border rounded-lg mr-4 w-48 text-center cursor-pointer">
+                                <i class="fa fa-search text-2xl text-primary mb-2"></i>
+                                <p class="font-medium">DeepSeek</p>
+                            </div>
+                            <div class="platform-item p-4 border rounded-lg w-48 text-center cursor-pointer">
+                                <i class="fa fa-comment text-2xl text-primary mb-2"></i>
+                                <p class="font-medium">豆包</p>
+                            </div>
+                        </div>
+                        
+                        <div class="platform-details">
+                            <h5 class="font-bold mb-2">ChatGPT优化策略</h5>
+                            <p class="text-gray-medium">
+                                ChatGPT偏好结构清晰、信息密度高的内容，特别是FAQ格式和分步指南。优化策略应包括：创建详细的产品FAQ页面、提供清晰的使用指南、引用权威数据和研究结果。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal" data-delay="200">
+                    <div class="bg-dark-light rounded-xl shadow-card p-6 mb-8 border border-gray-light">
+                        <h4 class="text-xl font-bold mb-4">AI平台流量趋势</h4>
+                        <div class="chart-container">
+                            <canvas id="platformTrafficChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-dark-light rounded-xl shadow-card p-6 mb-8 border border-gray-light">
+                        <h4 class="text-xl font-bold mb-4">关键词搜索热度</h4>
+                        <div class="chart-container">
+                            <canvas id="keywordTrendChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-6">
+                        <h4 class="text-xl font-bold mb-4">AI平台信源偏好</h4>
+                        <div class="chart-container">
+                            <canvas id="sourcePreferenceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Keyword Search Optimization Demo -->
+    <section class="section bg-gradient-gold text-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4">关键词搜索优化演示</h2>
+                <p class="text-xl opacity-90 max-w-2xl mx-auto">
+                    体验我们的AI关键词优化工具，了解如何提升您的品牌在AI平台上的搜索排名
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto bg-dark-light rounded-xl shadow-xl p-8 text-light reveal border border-gray-light">
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <input type="text" id="keyword-input" placeholder="输入您的产品关键词，如'智能手表'" class="flex-1 border border-gray-light rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                    <button id="analyze-keyword" class="bg-gradient-gold hover:bg-opacity-90 text-dark font-medium py-3 px-6 rounded-lg transition-all-300 shadow-lg shadow-primary shadow-opacity-20">
+                        <i class="fa fa-search mr-2"></i> 分析关键词
+                    </button>
+                </div>
+                
+                <div id="keyword-results" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4">关键词分析</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-bold">搜索量</h4>
+                                    <div class="flex items-center">
+                                        <div class="w-full bg-gray-light rounded-full h-2.5">
+                                            <div class="bg-primary h-2.5 rounded-full" style="width: 75%"></div>
+                                        </div>
+                                        <span class="ml-2">高</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">竞争度</h4>
+                                    <div class="flex items-center">
+                                        <div class="w-full bg-gray-light rounded-full h-2.5">
+                                            <div class="bg-secondary h-2.5 rounded-full" style="width: 60%"></div>
+                                        </div>
+                                        <span class="ml-2">中</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">转化潜力</h4>
+                                    <div class="flex items-center">
+                                        <div class="w-full bg-gray-light rounded-full h-2.5">
+                                            <div class="bg-accent h-2.5 rounded-full" style="width: 85%"></div>
+                                        </div>
+                                        <span class="ml-2">高</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold mt-6 mb-4">推荐关键词</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-opacity-20 transition-all-300">智能手表 跨境电商</span>
+                                <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-opacity-20 transition-all-300">智能手表 海外市场</span>
+                                <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-opacity-20 transition-all-300">智能手表 AI功能</span>
+                                <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-opacity-20 transition-all-300">智能手表 健康监测</span>
+                                <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-opacity-20 transition-all-300">智能手表 长续航</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold mb-4">AI平台排名预测</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4">
+                                        <i class="fa fa-robot text-primary"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between">
+                                            <span>ChatGPT</span>
+                                            <span class="font-bold">第8位</span>
+                                        </div>
+                                        <div class="w-full bg-gray-light rounded-full h-2 mt-1">
+                                            <div class="bg-primary h-2 rounded-full" style="width: 40%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4">
+                                        <i class="fa fa-google text-primary"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between">
+                                            <span>Gemini</span>
+                                            <span class="font-bold">第12位</span>
+                                        </div>
+                                        <div class="w-full bg-gray-light rounded-full h-2 mt-1">
+                                            <div class="bg-primary h-2 rounded-full" style="width: 30%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4">
+                                        <i class="fa fa-search text-primary"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between">
+                                            <span>DeepSeek</span>
+                                            <span class="font-bold">第6位</span>
+                                        </div>
+                                        <div class="w-full bg-gray-light rounded-full h-2 mt-1">
+                                            <div class="bg-primary h-2 rounded-full" style="width: 50%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4">
+                                        <i class="fa fa-comment text-primary"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between">
+                                            <span>豆包</span>
+                                            <span class="font-bold">第10位</span>
+                                        </div>
+                                        <div class="w-full bg-gray-light rounded-full h-2 mt-1">
+                                            <div class="bg-primary h-2 rounded-full" style="width: 35%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <button class="bg-primary hover:bg-primary bg-opacity-90 text-white font-medium py-2 px-4 rounded-lg transition-all-300 w-full">
+                                    获取完整优化方案
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="keyword-demo" class="flex flex-col items-center justify-center py-12">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/71356460bc5a494bb0b8aad544439e4e~tplv-a9rns2rl98-image.image?rcl=20251024150131D1133383A0624C7C5444&amp;rk3s=8e244e95&amp;rrcfp=f06b921b&amp;x-expires=1763881357&amp;x-signature=Zltvm%2B2bPc1oJkbOpzC7ogCWu04%3D" alt="AI关键词搜索优化分析" class="w-full max-w-md mb-6 rounded-lg shadow-lg">
+                    <p class="text-gray-medium text-center">
+                        输入您的产品关键词，体验我们的AI关键词优化分析工具
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Success Cases Section -->
+    <section id="cases" class="section bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4">成功案例</h2>
+                <p class="text-xl text-gray-medium max-w-2xl mx-auto">
+                    我们帮助众多跨境电商和外贸企业在AI平台上提升品牌曝光和产品销量
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Case 1 -->
+                <div class="bg-dark-light rounded-xl shadow-card overflow-hidden reveal border border-gray-light" data-delay="200">
+                    <div class="h-48 bg-gray-200 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fa fa-shopping-bag text-6xl text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">智能家居品牌</h3>
+                            <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm">家电行业</span>
+                        </div>
+                        <p class="text-gray-medium mb-6">
+                            通过GEO优化，该品牌在AI平台的产品提及率提升了120%，跨境订单增长35%，品牌搜索量增加50%。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-sm text-gray-medium">优化平台：</span>
+                                <div class="flex space-x-2 mt-1">
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">ChatGPT</span>
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">Gemini</span>
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">豆包</span>
+                                </div>
+                            </div>
+                            <a href="cases/case1.html" class="text-primary hover:text-primary hover:underline transition-all-300 inline-flex items-center">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Case 1 -->
+                <div class="bg-white rounded-xl shadow-card overflow-hidden reveal" data-delay="400">
+                    <div class="h-48 bg-gray-200 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fa fa-mobile text-6xl text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">3C配件品牌</h3>
+                            <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm">电子行业</span>
+                        </div>
+                        <p class="text-gray-medium mb-6">
+                            我们为该品牌优化了关键词策略，使其在AI平台的搜索排名提升了8位，自然流量增长75%，转化率提升28%。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-sm text-gray-medium">优化平台：</span>
+                                <div class="flex space-x-2 mt-1">
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">DeepSeek</span>
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">ChatGPT</span>
+                                </div>
+                            </div>
+                            <a href="cases/case2.html" class="text-primary hover:text-primary hover:underline transition-all-300 inline-flex items-center">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Case 3 -->
+                <div class="bg-white rounded-xl shadow-card overflow-hidden reveal" data-delay="600">
+                    <div class="h-48 bg-gray-200 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fa fa-leaf text-6xl text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">美妆护肤品牌</h3>
+                            <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full text-sm">美妆行业</span>
+                        </div>
+                        <p class="text-gray-medium mb-6">
+                            通过多平台AI曝光优化，该品牌在目标市场的品牌认知度提升了65%，AI平台推荐率提升了90%，销售额增长42%。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-sm text-gray-medium">优化平台：</span>
+                                <div class="flex space-x-2 mt-1">
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">Gemini</span>
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">豆包</span>
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">通义千问</span>
+                                </div>
+                            </div>
+                            <a href="cases/case3.html" class="text-primary hover:text-primary hover:underline transition-all-300 inline-flex items-center">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#contact" class="inline-block bg-primary hover:bg-primary bg-opacity-90 text-white font-medium py-3 px-8 rounded-full transition-all-300 shadow-lg">
+                    咨询我们的专家
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Service Process Section -->
+    <section id="process" class="section bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4">服务流程</h2>
+                <p class="text-xl text-gray-medium max-w-2xl mx-auto">
+                    我们提供端到端的AI平台曝光优化服务，从分析到执行，全程专业指导
+                </p>
+            </div>
+            
+            <div class="relative">
+                <!-- Process Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-light transform -translate-y-1/2 z-0"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="bg-dark-light rounded-xl shadow-card p-6 text-center reveal border border-gray-light" data-delay="200">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            1
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">需求分析</h3>
+                        <p class="text-gray-medium">
+                            深入了解企业目标市场、产品特点和竞争环境，制定个性化的AI平台曝光策略
+                        </p>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="bg-white rounded-xl shadow-card p-6 text-center reveal" data-delay="400">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            2
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">关键词研究</h3>
+                        <p class="text-gray-medium">
+                            基于AI搜索趋势，挖掘高价值关键词，分析用户意图，制定有效的关键词策略
+                        </p>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="bg-white rounded-xl shadow-card p-6 text-center reveal" data-delay="600">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            3
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">内容优化</h3>
+                        <p class="text-gray-medium">
+                            优化企业内容，使其更符合AI平台的推荐算法，提升内容在AI答案中的引用率
+                        </p>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="bg-white rounded-xl shadow-card p-6 text-center reveal" data-delay="800">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            4
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">效果监测</h3>
+                        <p class="text-gray-medium">
+                            实时监测内容在AI平台上的表现，持续优化策略，确保最佳曝光效果
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 bg-dark-light rounded-xl shadow-card p-8 reveal border border-gray-light">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-2/3 mb-8 md:mb-0 md:pr-8">
+                        <h3 class="text-2xl font-bold mb-4">为什么选择我们的GEO服务？</h3>
+                        <p class="text-gray-medium mb-6">
+                            在AI时代，传统的SEO策略已经无法满足企业的曝光需求。我们的GEO服务通过深入理解AI平台的推荐算法和用户行为，帮助企业在AI搜索结果中获得更高的可见度和引用率。
+                        </p>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                                <span>专业的AI平台分析团队，深入了解各平台算法特点</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                                <span>数据驱动的优化策略，基于实时AI搜索趋势</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                                <span>全链路服务，从关键词研究到内容优化再到效果监测</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                                <span>丰富的跨境电商行业经验，了解不同市场的用户需求</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/3">
+                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/69a0dbf2ae004c73961dae626af46934~tplv-a9rns2rl98-image.image?rcl=20251024150131D1133383A0624C7C5444&amp;rk3s=8e244e95&amp;rrcfp=f06b921b&amp;x-expires=1763881356&amp;x-signature=o7mPN4fR%2BkXy%2Fdmsc3yOpPOx%2BSQ%3D" alt="全球贸易数字化" class="w-full rounded-lg shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Us Section -->
+    <section id="about" class="section bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4">关于我们</h2>
+                <p class="text-xl text-gray-medium max-w-2xl mx-auto">
+                    我们是专注于AI平台曝光优化的专业团队，致力于帮助中国企业在全球AI生态中获得更大成功
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <h3 class="text-2xl font-bold mb-6">我们的使命</h3>
+                    <p class="text-gray-medium mb-6">
+                        在AI时代，全球信息获取方式正在发生根本性变革。我们的使命是帮助中国跨境电商和外贸企业适应这一变革，通过专业的GEO服务和关键词优化策略，在AI平台上提升品牌曝光和产品销量，成为AI时代下中国企业出海品牌排名曝光的最佳助手。
+                    </p>
+                    <p class="text-gray-medium mb-6">
+                        我们的团队由AI技术专家、数字营销专家和跨境电商行业资深人士组成，拥有丰富的行业经验和专业知识，能够为企业提供全方位的AI平台曝光优化解决方案。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-primary hover:text-secondary transition-all-300">
+                            <i class="fa fa-weixin text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-all-300">
+                            <i class="fa fa-weibo text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-all-300">
+                            <i class="fa fa-linkedin text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-all-300">
+                            <i class="fa fa-github text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="reveal" data-delay="200">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold text-primary mb-2 counter-value" data-target="500">0</div>
+                            <p class="text-gray-medium">服务客户</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold text-primary mb-2 counter-value" data-target="98">0</div>
+                            <p class="text-gray-medium">客户满意度(%)</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold text-primary mb-2 counter-value" data-target="120">0</div>
+                            <p class="text-gray-medium">平均曝光增长(%)</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-6 text-center">
+                            <div class="text-4xl font-bold text-primary mb-2 counter-value" data-target="50">0</div>
+                            <p class="text-gray-medium">行业奖项</p>
+                        </div>
+                    </div>
+                    
+                  
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="section bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4">联系我们</h2>
+                <p class="text-xl text-gray-medium max-w-2xl mx-auto">
+                    无论您是想了解更多关于我们的服务，还是需要定制化的AI平台曝光解决方案，都可以通过以下方式联系我们
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-dark-light rounded-xl shadow-card p-8 reveal border border-gray-light">
+                    <h3 class="text-2xl font-bold mb-6">免费咨询</h3>
+                    <form id="contact-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="name" class="block text-gray-medium mb-2">姓名</label>
+                                <input type="text" id="name" placeholder="请输入您的姓名" class="w-full border border-gray-light rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label for="company" class="block text-gray-medium mb-2">公司名称</label>
+                                <input type="text" id="company" placeholder="请输入您的公司名称" class="w-full border border-gray-light rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="email" class="block text-gray-medium mb-2">电子邮箱</label>
+                                <input type="email" id="email" placeholder="请输入您的电子邮箱" class="w-full border border-gray-light rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-gray-medium mb-2">电话</label>
+                                <input type="tel" id="phone" placeholder="请输入您的电话" class="w-full border border-gray-light rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="service" class="block text-gray-medium mb-2">咨询服务</label>
+                            <select id="service" class="w-full border border-gray-light rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option value="">请选择服务类型</option>
+                                <option value="geo">GEO服务</option>
+                                <option value="keyword">关键词搜索优化</option>
+                                <option value="brand">品牌曝光排名</option>
+                                <option value="other">其他服务</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-medium mb-2">咨询内容</label>
+                            <textarea id="message" placeholder="请详细描述您的需求" rows="4" class="w-full border border-gray-light rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                        </div>
+                        
+                        <button type="submit" style="background: linear-gradient(135deg, #D4AF37 0%, #F2D272 50%, #D4AF37 100%); color: #121212; font-weight: 500; padding: 0.75rem 2rem; border-radius: 0.5rem; transition: all 300ms ease-in-out; width: 100%; box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.2);">
+                            <i class="fa fa-paper-plane mr-2"></i> 提交咨询
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="reveal" data-delay="200">
+                    <div class="bg-white rounded-xl shadow-card p-8 mb-8">
+                        <h3 class="text-2xl font-bold mb-6">联系方式</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fa fa-map-marker text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold">地址</h5>
+                                    <p class="text-gray-medium">广东省深圳市伽利略信息技术有限公司</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fa fa-phone text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold">电话</h5>
+                                    <p class="text-gray-medium">+86 18459150668</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fa fa-envelope text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold">电子邮箱</h5>
+                                    <p class="text-gray-medium">youzi@jjlxxjs.cn</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fa fa-clock-o text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold">工作时间</h5>
+                                    <p class="text-gray-medium">周一至周五: 9:00 - 20:00</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-card p-8">
+                        <h3 class="text-2xl font-bold mb-6">常见问题</h3>
+                        <div class="space-y-4">
+                            <div class="border-b border-gray-light pb-4">
+                                <button class="flex justify-between items-center w-full text-left focus:outline-none">
+                                    <span class="font-bold">什么是GEO服务？</span>
+                                    <i class="fa fa-chevron-down text-primary"></i>
+                                </button>
+                                <div class="mt-2 text-gray-medium">
+                                    GEO（生成式引擎优化）是一种针对AI平台的优化策略，通过优化内容结构、语义关联和用户意图匹配，提高品牌内容在AI生成回答中的可见度和引用率。
+                                </div>
+                            </div>
+                            <div class="border-b border-gray-light pb-4">
+                                <button class="flex justify-between items-center w-full text-left focus:outline-none">
+                                    <span class="font-bold">GEO与传统SEO有什么区别？</span>
+                                    <i class="fa fa-chevron-down text-primary"></i>
+                                </button>
+                                <div class="mt-2 text-gray-medium hidden">
+                                    SEO主要关注在传统搜索引擎（如Google、百度）上的排名，而GEO则专注于在AI平台（如ChatGPT、Gemini）上的可见度和引用率。GEO更注重内容的深度、权威性和多维度交互性，以适配生成式AI的推荐逻辑。
+                                </div>
+                            </div>
+                            <div class="border-b border-gray-light pb-4">
+                                <button class="flex justify-between items-center w-full text-left focus:outline-none">
+                                    <span class="font-bold">多长时间能看到优化效果？</span>
+                                    <i class="fa fa-chevron-down text-primary"></i>
+                                </button>
+                                <div class="mt-2 text-gray-medium hidden">
+                                    通常情况下，客户可以在优化后的4-8周内看到初步效果，如关键词排名提升、AI平台提及率增加等。要达到最佳效果，建议持续优化3-6个月。
+                                </div>
+                            </div>
+                            <div>
+                                <button class="flex justify-between items-center w-full text-left focus:outline-none">
+                                    <span class="font-bold">如何衡量GEO优化的效果？</span>
+                                    <i class="fa fa-chevron-down text-primary"></i>
+                                </button>
+                                <div class="mt-2 text-gray-medium hidden">
+                                    我们通过多种指标衡量GEO优化效果，包括AI平台提及率、关键词排名、自然流量增长、转化率提升等。我们会为客户提供定期的效果报告，展示优化进展和成果。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 border-t border-gray-light">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Global<span class="text-secondary">AI</span></h3>
+                    <p class="text-gray-medium">
+                        专注于AI平台曝光优化的专业服务提供商，帮助中国企业在全球AI生态中获得更大成功。
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">服务</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#services" class="text-gray-medium hover:text-white transition-all-300">GEO服务</a></li>
+                        <li><a href="#services" class="text-gray-medium hover:text-white transition-all-300">关键词搜索优化</a></li>
+                        <li><a href="#services" class="text-gray-medium hover:text-white transition-all-300">品牌曝光排名</a></li>
+                        <li><a href="#services" class="text-gray-medium hover:text-white transition-all-300">AI平台分析</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">关于</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-medium hover:text-white transition-all-300">关于我们</a></li>
+                        <li><a href="#cases" class="text-gray-medium hover:text-white transition-all-300">成功案例</a></li>
+                        <li><a href="#" class="text-gray-medium hover:text-white transition-all-300">博客</a></li>
+                        <li><a href="#" class="text-gray-medium hover:text-white transition-all-300">加入我们</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">联系</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fa fa-map-marker mr-2"></i>
+                            <span class="text-gray-medium">广东省深圳市南山区高新中二路软件园一期3栋504</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone mr-2"></i>
+                            <span class="text-gray-medium">+86 18459150668</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope mr-2"></i>
+                            <span class="text-gray-medium">youzi@jllxxjs.cn</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-medium text-sm mb-4 md:mb-0">
+                    © 2025 GlobalAI. 保留所有权利。
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-medium hover:text-white transition-all-300">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <a href="#" class="text-gray-medium hover:text-white transition-all-300">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                    <a href="#" class="text-gray-medium hover:text-white transition-all-300">
+                        <i class="fa fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="text-gray-medium hover:text-white transition-all-300">
+                        <i class="fa fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                    navbar.classList.remove('bg-transparent');
+                    navbar.classList.add('bg-white');
+                    
+                    // Change text color
+                    const navLinks = navbar.querySelectorAll('a:not(.mobile-link)');
+                    navLinks.forEach(link => {
+                        link.classList.remove('text-white');
+                        link.classList.add('text-dark');
+                    });
+                    
+                    // Change menu toggle color
+                    const menuToggle = document.getElementById('menu-toggle');
+                    menuToggle.classList.remove('text-white');
+                    menuToggle.classList.add('text-dark');
+                } else {
+                    navbar.classList.remove('scrolled');
+                    navbar.classList.add('bg-transparent');
+                    navbar.classList.remove('bg-white');
+                    
+                    // Change text color back
+                    const navLinks = navbar.querySelectorAll('a:not(.mobile-link)');
+                    navLinks.forEach(link => {
+                        link.classList.add('text-white');
+                        link.classList.remove('text-dark');
+                    });
+                    
+                    // Change menu toggle color back
+                    const menuToggle = document.getElementById('menu-toggle');
+                    menuToggle.classList.add('text-white');
+                    menuToggle.classList.remove('text-dark');
+                }
+            });
+            
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const closeMenu = document.getElementById('close-menu');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.remove('translate-x-full');
+            });
+            
+            closeMenu.addEventListener('click', function() {
+                mobileMenu.classList.add('translate-x-full');
+            });
+            
+            mobileLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('translate-x-full');
+                });
+            });
+            
+            // Scroll reveal animation
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            function checkReveal() {
+                for (let i = 0; i < revealElements.length; i++) {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = revealElements[i].getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < windowHeight - elementVisible) {
+                        // Add delay if specified
+                        const delay = revealElements[i].getAttribute('data-delay') || 0;
+                        setTimeout(() => {
+                            revealElements[i].classList.add('active');
+                        }, delay);
+                    }
+                }
+            }
+            
+            window.addEventListener('scroll', checkReveal);
+            checkReveal(); // Initial check
+            
+            // Platform selector
+            const platformItems = document.querySelectorAll('.platform-item');
+            const platformDetails = document.querySelector('.platform-details');
+            
+            const platformInfo = {
+                'ChatGPT': {
+                    title: 'ChatGPT优化策略',
+                    description: 'ChatGPT偏好结构清晰、信息密度高的内容，特别是FAQ格式和分步指南。优化策略应包括：创建详细的产品FAQ页面、提供清晰的使用指南、引用权威数据和研究结果。'
+                },
+                'Gemini': {
+                    title: 'Gemini优化策略',
+                    description: 'Gemini由Google开发，特别擅长理解和处理多模态内容。优化策略应包括：提供高质量的图片和视频内容、确保内容的时效性和准确性、优化Google知识图谱中的企业信息。'
+                },
+                'DeepSeek': {
+                    title: 'DeepSeek优化策略',
+                    description: 'DeepSeek是国内领先的AI平台，对中文内容有更好的理解。优化策略应包括：优化中文关键词和语义表达、在国内高权重平台发布内容、参与行业问答和讨论。'
+                },
+                '豆包': {
+                    title: '豆包优化策略',
+                    description: '豆包是字节跳动开发的AI平台，用户群体年轻且活跃。优化策略应包括：创建生动有趣的内容、使用短视频和图文结合的形式、参与热门话题和挑战。'
+                }
+            };
+            
+            platformItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    platformItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Update platform details
+                    const platformName = this.querySelector('p').textContent;
+                    const info = platformInfo[platformName];
+                    
+                    platformDetails.innerHTML = `
+                        <h5 class="font-bold mb-2">${info.title}</h5>
+                        <p class="text-gray-medium">
+                            ${info.description}
+                        </p>
+                    `;
+                });
+            });
+            
+            // Keyword analysis demo
+            const keywordInput = document.getElementById('keyword-input');
+            const analyzeButton = document.getElementById('analyze-keyword');
+            const keywordResults = document.getElementById('keyword-results');
+            const keywordDemo = document.getElementById('keyword-demo');
+            
+            analyzeButton.addEventListener('click', function() {
+                const keyword = keywordInput.value.trim();
+                
+                if (keyword) {
+                    // Hide demo, show results
+                    keywordDemo.classList.add('hidden');
+                    keywordResults.classList.remove('hidden');
+                }
+            });
+            
+            keywordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const keyword = keywordInput.value.trim();
+                    
+                    if (keyword) {
+                        // Hide demo, show results
+                        keywordDemo.classList.add('hidden');
+                        keywordResults.classList.remove('hidden');
+                    }
+                }
+            });
+            
+            // Animated numbers
+            const counterElements = document.querySelectorAll('.counter-value');
+            
+            function animateCounter(element) {
+                const target = parseInt(element.getAttribute('data-target'));
+                const duration = 2000; // 2 seconds
+                const stepTime = 50; // Update every 50ms
+                const totalSteps = duration / stepTime;
+                const stepValue = target / totalSteps;
+                
+                let current = 0;
+                const timer = setInterval(() => {
+                    current += stepValue;
+                    element.textContent = Math.round(current);
+                    
+                    if (current >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            }
+            
+            // Animate counters when they come into view
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        counterObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            counterElements.forEach(counter => {
+                counterObserver.observe(counter);
+            });
+            
+            // FAQ accordion
+            const faqButtons = document.querySelectorAll('.bg-white .flex.justify-between');
+            
+            faqButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // Toggle content visibility
+                    content.classList.toggle('hidden');
+                    
+                    // Toggle icon direction
+                    if (content.classList.contains('hidden')) {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    } else {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    }
+                });
+            });
+            
+            // Contact form submission
+            const contactForm = document.getElementById('contact-form');
+            
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const name = document.getElementById('name').value;
+                const company = document.getElementById('company').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const service = document.getElementById('service').value;
+                const message = document.getElementById('message').value;
+                
+                // Validate form
+                if (!name || !email || !message) {
+                    alert('请填写必填字段');
+                    return;
+                }
+                
+                // Simulate form submission
+                alert('感谢您的咨询！我们的团队将在24小时内与您联系。');
+                contactForm.reset();
+            });
+            
+            // Charts
+            // Platform Traffic Chart
+            const platformTrafficCtx = document.getElementById('platformTrafficChart').getContext('2d');
+            const platformTrafficChart = new Chart(platformTrafficCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月'],
+                    datasets: [
+                        {
+                            label: 'AI平台流量',
+                            data: [10, 15, 25, 40, 60, 85, 110],
+                            borderColor: '#D4AF37',
+                            backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: '传统搜索引擎流量',
+                            data: [100, 98, 95, 90, 85, 80, 75],
+                            borderColor: '#B0C4DE',
+                            backgroundColor: 'rgba(176, 196, 222, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#3E4C59'
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#9AA5B1'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#9AA5B1'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Keyword Trend Chart
+            const keywordTrendCtx = document.getElementById('keywordTrendChart').getContext('2d');
+            const keywordTrendChart = new Chart(keywordTrendCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['传统关键词', '短尾关键词', '长尾关键词', '问题式关键词', '语义关键词'],
+                    datasets: [
+                        {
+                            label: '搜索量',
+                            data: [65, 75, 90, 85, 95],
+                            backgroundColor: '#D4AF37'
+                        },
+                        {
+                            label: '竞争度',
+                            data: [80, 70, 50, 40, 60],
+                            backgroundColor: '#B0C4DE'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#3E4C59'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#9AA5B1'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#9AA5B1'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Source Preference Chart
+            const sourcePreferenceCtx = document.getElementById('sourcePreferenceChart').getContext('2d');
+            const sourcePreferenceChart = new Chart(sourcePreferenceCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['品牌官网', '电商平台', '社交媒体', '行业论坛', '新闻媒体', '专业博客'],
+                    datasets: [
+                        {
+                            label: 'ChatGPT',
+                            data: [80, 70, 60, 75, 85, 90],
+                            backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                            borderColor: '#D4AF37',
+                            pointBackgroundColor: '#D4AF37',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#D4AF37'
+                        },
+                        {
+                            label: 'Gemini',
+                            data: [85, 65, 70, 60, 90, 75],
+                            backgroundColor: 'rgba(176, 196, 222, 0.2)',
+                            borderColor: '#B0C4DE',
+                            pointBackgroundColor: '#B0C4DE',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#B0C4DE'
+                        },
+                        {
+                            label: 'DeepSeek',
+                            data: [70, 80, 65, 85, 75, 60],
+                            backgroundColor: 'rgba(139, 69, 19, 0.2)',
+                            borderColor: '#8B4513',
+                            pointBackgroundColor: '#8B4513',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#8B4513'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#3E4C59'
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                color: '#9AA5B1'
+                            },
+                            ticks: {
+                                color: '#9AA5B1',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+
+</body></html>
